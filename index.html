@@ -3,6 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5">
+
+<!-- ── SECURITY ──
+     Enforced in-document because GitHub Pages cannot send custom HTTP
+     headers. Site is fully self-contained: no CDN, fonts, analytics or
+     outbound requests, so the policy can stay maximally strict.
+     Note: frame-ancestors and HSTS are header-only and are NOT active
+     here — see _headers / .htaccess if this ever moves to a host that
+     supports response headers. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; object-src 'none'; media-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'self'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+
 <meta name="theme-color" content="#0A1628">
 <meta name="description" content="Pepsynth Labs Peptide Reconstitution Calculator — instant BAC water, concentration and insulin-syringe unit calculations plus a full reference library for 50+ research peptides.">
 <title>Peptide Reconstitution Calculator | Pepsynth Labs</title>
@@ -34,7 +46,7 @@
     <p>All information and products referenced are for <strong>legitimate laboratory research use only</strong>. They are not intended to diagnose, treat, cure or prevent any disease and are <strong>not for human or animal consumption</strong>.</p>
     <p>By continuing you acknowledge that you are at least 21 years of age and have a legitimate research basis for accessing this material.</p>
     <button class="btn btn-primary" id="gateOk">I am over 21 &amp; a valid researcher</button>
-    <a class="gate-exit" href="https://www.google.com">Exit</a>
+    <a class="gate-exit" href="https://www.google.com" rel="noopener noreferrer">Exit</a>
   </div>
 </div>
 

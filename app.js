@@ -186,8 +186,9 @@
     return s.indexOf('.') > -1 ? s.replace(/\.?0+$/, '') : s;
   };
   const plural = (n, w) => fmt(n, 0) + ' ' + w + (Math.round(n) === 1 ? '' : 's');
-  const esc = (s) => String(s).replace(/[&<>"]/g, (c) =>
-    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const esc = (s) => String(s).replace(/[&<>"'`/]/g, (c) =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;',
+       "'": '&#39;', '`': '&#96;', '/': '&#47;' }[c]));
 
   function doseInMg() {
     const v = num(el.dose.value);
