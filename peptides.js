@@ -94,13 +94,13 @@ const PEPTIDES = [
   },
   {
     n: "5-Amino-1MQ", cat: "Metabolic", vials: [5, 50, 100],
-    mw: "174.2 Da", half: "~4–6 hours", route: "Oral (capsule) / SubQ",
-    freq: "Once daily", unit: "mg",
-    low: 50, mid: 100, high: 150,
-    titr: "50 mg daily × 1 wk → 100 mg daily. Ceiling ~150 mg.",
-    solvent: "Bacteriostatic water (if injectable form)", bac: 2,
-    storage: "Room temp for capsules; 2–8 °C reconstituted.",
-    notes: "Small-molecule NNMT inhibitor — raises intracellular NAD+ and drives adipocyte metabolic activity. Not a true peptide.",
+    mw: "174.2 Da", half: "~4–6 hours", route: "SubQ injection",
+    freq: "Once daily", unit: "mcg",
+    low: 150, mid: 250, high: 500,
+    titr: "150 mcg daily × 1 wk → 250 mcg daily. Ceiling ~500 mcg.",
+    solvent: "Bacteriostatic water", bac: 2,
+    storage: "2–8 °C once reconstituted; use within 28 days.",
+    notes: "Small-molecule NNMT inhibitor — raises intracellular NAD+ and drives adipocyte metabolic activity. Not a true peptide. Injectable dosing is far lower than oral capsule dosing (50–150 mg) because SubQ delivery bypasses first-pass metabolism — do not cross-apply capsule figures to a vial.",
     stack: "NAD+, MOTS-c, Tesofensine"
   },
   {
@@ -263,7 +263,7 @@ const PEPTIDES = [
   // ——— HEALING / REGENERATIVE ———
   {
     n: "BPC-157", cat: "Healing & Repair", vials: [2, 5, 10, 20],
-    mw: "1419.5 Da", half: "~4 hours", route: "SubQ (systemic or near-site) / Oral",
+    mw: "1419.5 Da", half: "~4 hours", route: "SubQ (systemic or near-site)",
     freq: "1–2× daily", unit: "mcg",
     low: 200, mid: 500, high: 1000,
     titr: "250–500 mcg 1–2×/day. Typical research block: 4–8 weeks, then off.",
@@ -296,7 +296,7 @@ const PEPTIDES = [
   },
   {
     n: "KPV", cat: "Healing & Repair", vials: [5, 10, 20],
-    mw: "342.4 Da", half: "~1–2 hours", route: "SubQ / Oral / Topical",
+    mw: "342.4 Da", half: "~1–2 hours", route: "SubQ injection",
     freq: "Once daily", unit: "mcg",
     low: 200, mid: 400, high: 500,
     titr: "250–500 mcg daily. Often run 4–8 weeks.",
@@ -430,7 +430,7 @@ const PEPTIDES = [
   },
   {
     n: "Pinealon", cat: "Longevity", vials: [5, 10, 20],
-    mw: "~340 Da", half: "Short", route: "SubQ / IM / Oral",
+    mw: "~340 Da", half: "Short", route: "SubQ / IM injection",
     freq: "Once daily", unit: "mg",
     low: 1, mid: 2, high: 5,
     titr: "1–2 mg daily for 10–20 day courses, 2–3 courses per year.",
