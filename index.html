@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5">
+<meta name="theme-color" content="#0A1628">
+<meta name="description" content="Pepsynth Labs Peptide Reconstitution Calculator — instant BAC water, concentration and insulin-syringe unit calculations plus a full reference library for 50+ research peptides.">
+<title>Peptide Reconstitution Calculator | Pepsynth Labs</title>
+<link rel="canonical" href="https://calculator.pepsynthlabs.com/">
+<meta name="robots" content="index, follow">
+
+<!-- Brand assets -->
+<link rel="icon" href="assets/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta property="og:title" content="Peptide Reconstitution Calculator | Pepsynth Labs">
+<meta property="og:description" content="Instant BAC water, concentration and insulin-syringe unit calculations for 50+ research peptides.">
+<meta property="og:image" content="https://calculator.pepsynthlabs.com/assets/og-image.png">
+<meta property="og:url" content="https://calculator.pepsynthlabs.com/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Pepsynth Labs">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="stylesheet" href="styles.css">  <link rel="stylesheet" href="meter.css"></head>
+<body>
+
+<!-- ── AGE / RESEARCH GATE ── -->
+<div class="gate" id="gate">
+  <div class="gate-card">
+    <div class="logo logo-lg">
+      <img class="atom" src="assets/logo-atom.png" alt="" width="300" height="300">
+      <img class="wordmark" src="assets/logo-wordmark.png" alt="Pepsynth Labs" width="970" height="326">
+    </div>
+    <h2>Important Legal Notice</h2>
+    <p>All information and products referenced are for <strong>legitimate laboratory research use only</strong>. They are not intended to diagnose, treat, cure or prevent any disease and are <strong>not for human or animal consumption</strong>.</p>
+    <p>By continuing you acknowledge that you are at least 21 years of age and have a legitimate research basis for accessing this material.</p>
+    <button class="btn btn-primary" id="gateOk">I am over 21 &amp; a valid researcher</button>
+    <a class="gate-exit" href="https://www.google.com">Exit</a>
+  </div>
+</div>
+
+<!-- ── HEADER ── -->
+<header class="site-head">
+  <div class="wrap head-inner">
+    <a class="logo" href="https://pepsynthlabs.com" aria-label="Pepsynth Labs">
+      <img class="wordmark" src="assets/logo-wordmark.png" alt="Pepsynth Labs" width="970" height="326">
+    </a>
+    <a class="head-cta" href="https://pepsynthlabs.com/shop/">Shop</a>
+  </div>
+  <div class="ticker"><span>99% Purity · Third-Party Tested &nbsp;•&nbsp; Free U.S. Shipping Over $200 &nbsp;•&nbsp; 3-Day Shipping if Ordered Before 4pm PST &nbsp;•&nbsp; Bulk Orders: (707) 969-0777 &nbsp;•&nbsp; 99% Purity · Third-Party Tested &nbsp;•&nbsp; Free U.S. Shipping Over $200 &nbsp;•&nbsp; 3-Day Shipping if Ordered Before 4pm PST &nbsp;•&nbsp; Bulk Orders: (707) 969-0777 &nbsp;•&nbsp;</span></div>
+</header>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <img class="atom-deco hero-atom" src="assets/logo-atom.png" alt="" aria-hidden="true">
+  <div class="wrap">
+    <span class="eyebrow">Research Tools</span>
+    <h1>Peptide Reconstitution<br><b>Calculator</b></h1>
+    <p>Exact bacteriostatic water volumes, concentrations and insulin-syringe unit marks — plus a complete reconstitution &amp; handling reference for 50+ research compounds.</p>
+  </div>
+</section>
+
+<main class="wrap">
+
+<!-- ── CALCULATOR ── -->
+<section class="card calc" id="calc">
+  <h2 class="card-title">Reconstitution Calculator</h2>
+
+  <label class="field">
+    <span>Peptide <small>(optional — autofills reference values)</small></span>
+    <select id="pep"><option value="">— Select a compound —</option></select>
+  </label>
+
+  <div class="grid2">
+    <label class="field">
+      <span>Vial Strength</span>
+      <select id="vialSel"></select>
+      <div class="input-suffix custom-vial" id="vialCustomWrap" hidden>
+        <input type="number" id="vial" inputmode="decimal" value="10" min="0.01" step="any" placeholder="Enter mg">
+        <b>mg</b>
+      </div>
+    </label>
+    <label class="field">
+      <span>BAC Water Added</span>
+      <div class="input-suffix">
+        <input type="number" id="bac" inputmode="decimal" value="2" min="0.01" step="any">
+        <b>mL</b>
+      </div>
+    </label>
+  </div>
+
+  <label class="field">
+    <span>Desired Dose per Administration</span>
+    <div class="input-suffix">
+      <input type="number" id="dose" inputmode="decimal" value="250" min="0.0001" step="any">
+      <select id="doseUnit" class="unit-sel">
+        <option value="mcg">mcg</option>
+        <option value="mg">mg</option>
+      </select>
+    </div>
+  </label>
+
+  <!-- COMMON RANGE PRESETS + METER -->
+  <div class="range-box" id="rangeBox" hidden>
+    <div class="range-head">
+      <span class="range-title">Commonly Cited Range</span>
+      <span class="ev-badge" id="evBadge">—</span>
+    </div>
+
+    <div class="presets" id="presets">
+      <button type="button" class="preset" data-k="low"><em>Low / Starting</em><b id="pLow">—</b></button>
+      <button type="button" class="preset" data-k="mid"><em>Common</em><b id="pMid">—</b></button>
+      <button type="button" class="preset" data-k="high"><em>Upper / Ceiling</em><b id="pHigh">—</b></button>
+    </div>
+
+    <div class="meter" id="meter">
+      <div class="meter-track">
+        <div class="zone zone-under"></div>
+        <div class="zone zone-in"></div>
+        <div class="zone zone-over"></div>
+      </div>
+      <div class="meter-needle" id="needle"><span class="needle-dot"></span></div>
+      <div class="meter-scale">
+        <span id="sLow">—</span>
+        <span id="sHigh">—</span>
+      </div>
+    </div>
+
+    <p class="meter-status" id="meterStatus">—</p>
+    <p class="ev-note" id="evNote"></p>
+  </div>
+
+  <label class="field">
+    <span>Syringe Type</span>
+    <select id="syr">
+      <option value="100">U-100 insulin · 1 mL (100 units)</option>
+      <option value="50">U-100 insulin · 0.5 mL (50 units)</option>
+      <option value="30">U-100 insulin · 0.3 mL (30 units)</option>
+    </select>
+  </label>
+
+  <label class="field">
+    <span>Administration Frequency <small>(for vial longevity)</small></span>
+    <select id="freq">
+      <option value="7">Once weekly</option>
+      <option value="3.5">Twice weekly</option>
+      <option value="2.33">3× weekly</option>
+      <option value="2">Every other day</option>
+      <option value="1" selected>Once daily</option>
+      <option value="0.5">Twice daily</option>
+      <option value="0.333">3× daily</option>
+    </select>
+  </label>
+
+  <!-- RESULTS -->
+  <div class="results" id="results">
+    <img class="atom-deco results-atom" src="assets/logo-atom.png" alt="" aria-hidden="true">
+    <div class="res-hero">
+      <span class="res-label">Draw to this mark</span>
+      <div class="res-units"><b id="rUnits">5</b><span>units</span></div>
+      <div class="res-ml" id="rMl">0.05 mL</div>
+    </div>
+
+    <div class="syringe" id="syringe" aria-hidden="true">
+      <div class="barrel">
+        <div class="fill" id="sFill"></div>
+        <div class="ticks" id="sTicks"></div>
+      </div>
+      <div class="plunger"></div>
+      <div class="needle"></div>
+    </div>
+
+    <div class="res-grid">
+      <div><span>Concentration</span><b id="rConc">5 mg/mL</b></div>
+      <div><span>Per unit (U-100)</span><b id="rPer">50 mcg</b></div>
+      <div><span>Doses per vial</span><b id="rDoses">40</b></div>
+      <div><span>Vial lasts</span><b id="rLast">40 days</b></div>
+    </div>
+
+    <p class="warn" id="warn" hidden></p>
+    <div class="res-actions">
+      <button class="btn btn-ghost" id="copyBtn">Copy Summary</button>
+      <button class="btn btn-ghost" id="resetBtn">Reset</button>
+    </div>
+  </div>
+  <p class="fineprint">All figures assume a standard U-100 insulin syringe where 100 units = 1 mL. Always verify against the certificate of analysis for your specific lot.</p>
+</section>
+
+<!-- ── QUICK REFERENCE FOR SELECTED PEPTIDE ── -->
+<section class="card ref" id="refCard" hidden>
+  <h2 class="card-title" id="refName">—</h2>
+  <span class="tag" id="refCat"></span>
+  <div class="spec" id="refSpec"></div>
+  <div class="ref-block"><h3>Titration Protocol</h3><p id="refTitr"></p></div>
+  <div class="ref-block"><h3>Reconstitution &amp; Storage</h3><p id="refStore"></p></div>
+  <div class="ref-block"><h3>Research Notes</h3><p id="refNotes"></p></div>
+  <div class="ref-block"><h3>Commonly Studied Alongside</h3><p id="refStack"></p></div>
+</section>
+
+<!-- ── HOW TO RECONSTITUTE ── -->
+<section class="card">
+  <h2 class="card-title">How to Reconstitute a Peptide</h2>
+  <ol class="steps">
+    <li><b>Let the vial reach room temperature.</b> Take the lyophilized vial out of refrigeration 15–20 minutes beforehand. Cold glass plus cold diluent slows dissolution.</li>
+    <li><b>Sanitize both stoppers.</b> Wipe the peptide vial and the bacteriostatic water vial with a fresh alcohol swab and allow to air dry.</li>
+    <li><b>Draw your diluent.</b> Use the volume the calculator gives you. More water = easier, more accurate small doses. Less water = fewer, smaller injections.</li>
+    <li><b>Angle the needle against the glass wall.</b> Let the water run slowly down the side of the vial. Never inject the stream directly onto the powder cake — shear force denatures the peptide.</li>
+    <li><b>Do not shake. Ever.</b> Roll the vial gently between your palms or swirl until clear. Full dissolution can take 1–5 minutes. Foaming means protein damage.</li>
+    <li><b>Inspect the solution.</b> It should be clear and particulate-free. GHK-Cu is an expected deep blue. Cloudiness, floaters or discoloration in any other compound = discard.</li>
+    <li><b>Label and refrigerate.</b> Write the reconstitution date, vial strength and final concentration on the vial. Store at 2–8 °C.</li>
+    <li><b>Draw with a fresh needle each time.</b> Swab the stopper before every entry.</li>
+  </ol>
+</section>
+
+<!-- ── STORAGE ── -->
+<section class="card">
+  <h2 class="card-title">Storage &amp; Stability Reference</h2>
+  <div class="tbl-scroll">
+    <table>
+      <thead><tr><th>State</th><th>Temperature</th><th>Typical Stability</th></tr></thead>
+      <tbody>
+        <tr><td>Lyophilized (sealed)</td><td>−20 °C</td><td>24+ months</td></tr>
+        <tr><td>Lyophilized (sealed)</td><td>2–8 °C</td><td>12–24 months</td></tr>
+        <tr><td>Lyophilized (sealed)</td><td>Room temp</td><td>2–4 weeks (shipping window)</td></tr>
+        <tr><td>Reconstituted — bacteriostatic water</td><td>2–8 °C</td><td>28–60 days</td></tr>
+        <tr><td>Reconstituted — sterile water</td><td>2–8 °C</td><td>24 hours (no preservative)</td></tr>
+        <tr><td>Reconstituted</td><td>Room temp</td><td>Hours to days — avoid</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout">
+    <b>Diluent selection.</b> Bacteriostatic water contains 0.9% benzyl alcohol and permits multi-dose use over weeks. Sterile water has no preservative and is single-use only. Never freeze a reconstituted peptide — ice crystal formation shears the peptide chain. Protect light-sensitive compounds (NAD+, GHK-Cu, Glutathione, Tesamorelin) from UV exposure.
+  </div>
+</section>
+
+<!-- ── LIBRARY ── -->
+<section class="card lib">
+  <h2 class="card-title">Peptide Reference Library</h2>
+  <input type="search" id="search" class="search" placeholder="Search 50+ compounds…" autocomplete="off">
+  <div class="chips" id="chips"></div>
+  <div id="libList" class="lib-list"></div>
+</section>
+
+<!-- ── CONVERSIONS ── -->
+<section class="card">
+  <h2 class="card-title">Unit Conversions</h2>
+  <div class="conv">
+    <div><b>1 mg</b><span>= 1,000 mcg</span></div>
+    <div><b>1 mL</b><span>= 100 units (U-100)</span></div>
+    <div><b>10 units</b><span>= 0.10 mL</span></div>
+    <div><b>1 cc</b><span>= 1 mL</span></div>
+    <div><b>1 g</b><span>= 1,000 mg</span></div>
+    <div><b>1 unit</b><span>= 0.01 mL</span></div>
+  </div>
+  <div class="callout">
+    <b>The core formula.</b><br>
+    Concentration (mg/mL) = Vial strength (mg) ÷ BAC water (mL)<br>
+    Volume to draw (mL) = Dose (mg) ÷ Concentration (mg/mL)<br>
+    Insulin units = Volume (mL) × 100
+  </div>
+</section>
+
+<!-- ── FAQ ── -->
+<section class="card">
+  <h2 class="card-title">Frequently Asked</h2>
+  <details><summary>Does adding more bacteriostatic water make the dose weaker?</summary><p>No. The total quantity of peptide in the vial never changes. More diluent simply spreads that same mass over a larger volume, so each unit on the syringe carries less peptide — which makes small doses far easier to measure accurately. You draw a larger volume to deliver the identical dose.</p></details>
+  <details><summary>How much water should I use?</summary><p>Choose the volume that puts your target dose between 10 and 50 units on a U-100 syringe. Below 5 units, measurement error becomes significant; above 50 units, injection volume becomes uncomfortable. For most 5–10 mg vials, 2 mL is the practical default.</p></details>
+  <details><summary>If the vial says 10 mg, is that one dose?</summary><p>No. The label states the total mass of lyophilized peptide in the vial. A 10 mg vial dosed at 250 mcg contains 40 separate research doses.</p></details>
+  <details><summary>My peptide didn't fully dissolve. What now?</summary><p>Let it sit at room temperature and swirl gently every few minutes — some compounds take up to 15 minutes. Persistent particulate after 30 minutes suggests degradation or an incompatible diluent; do not use.</p></details>
+  <details><summary>Can I mix two peptides in one syringe?</summary><p>Physically possible for many compounds and common in research protocols, but stability data for arbitrary combinations is generally absent. Reconstitute and store separately; combine in the syringe only immediately before use.</p></details>
+  <details><summary>What happens if the vacuum is gone from the vial?</summary><p>Loss of vacuum usually occurs in transit and does not by itself indicate degradation of a sealed lyophilized product. Confirm the stopper is intact and the powder cake is dry and unmelted.</p></details>
+  <details><summary>Are the peptides shipped as liquid?</summary><p>No. Compounds are supplied as lyophilized powder and require reconstitution with a suitable diluent. Bacteriostatic water and syringes are sold separately.</p></details>
+  <details><summary>How should I store products before reconstitution?</summary><p>Sealed lyophilized vials are stable refrigerated at 2–8 °C for a year or more, and at −20 °C for two years or more. Keep them dry, sealed and away from light.</p></details>
+</section>
+
+<!-- ── DISCLAIMER ── -->
+<section class="card disclaimer">
+  <h2 class="card-title">Disclaimer</h2>
+  <p>This calculator and reference library are provided strictly as <b>laboratory research tools</b>. The ranges shown are drawn from published literature and are presented for in-vitro and analytical reference only. They are not dosing instructions, not medical advice, and are not a substitute for consultation with a licensed physician.</p>
+  <p>Pepsynth is a chemical supplier. Pepsynth is not a compounding pharmacy or chemical compounding facility as defined under Section 503A of the Federal Food, Drug, and Cosmetic Act, nor an outsourcing facility as defined under Section 503B.</p>
+  <p>The statements made on this page have not been evaluated by the U.S. Food and Drug Administration. Products referenced are not intended to diagnose, treat, cure or prevent any disease. <b>Human and animal consumption prohibited. Laboratory / in-vitro experimental use only.</b> Always verify all calculations independently before use in any protocol.</p>
+</section>
+
+</main>
+
+<footer class="site-foot">
+  <img class="atom-deco foot-atom" src="assets/logo-atom.png" alt="" aria-hidden="true">
+  <div class="wrap">
+    <div class="logo logo-foot">
+      <img class="wordmark" src="assets/logo-wordmark.png" alt="Pepsynth Labs" width="970" height="326">
+    </div>
+    <nav>
+      <a href="https://pepsynthlabs.com/">Home</a>
+      <a href="https://pepsynthlabs.com/shop/">Shop</a>
+      <a href="https://pepsynthlabs.com/about-us/">About</a>
+      <a href="https://pepsynthlabs.com/blog/">Blog</a>
+      <a href="https://pepsynthlabs.com/contact/">Contact</a>
+      <a href="https://pepsynthlabs.com/privacy-policy/">Privacy</a>
+      <a href="https://pepsynthlabs.com/terms-conditions/">Terms</a>
+    </nav>
+    <p class="contact"><a href="mailto:sales@Pepsynthlabs.com">sales@Pepsynthlabs.com</a> · <a href="tel:+17079690777">+1 707 969-0777</a></p>
+    <p class="small">All products are sold for research, laboratory, or analytical purposes only, and are not for human consumption.</p>
+    <p class="small">© 2026 Pepsynth. All Rights Reserved.</p>
+  </div>
+</footer>
+
+<a class="fab" href="#calc" id="fab">Calculator</a>
+
+<script src="peptides.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

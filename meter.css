@@ -1,0 +1,169 @@
+/* ============================================================
+   PEPSYNTH LABS — DOSE RANGE PRESETS + POSITION METER
+   Loaded after styles.css
+   ============================================================ */
+
+.range-box {
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  background: rgba(10, 22, 40, .45);
+}
+
+.range-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.range-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ---------- evidence badge ---------- */
+.ev-badge {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .03em;
+  padding: 4px 9px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.ev-approved   { color: #0A1628; background: var(--ok);     border-color: var(--ok); }
+.ev-trial      { color: #0A1628; background: var(--cyan);   border-color: var(--cyan); }
+.ev-limited    { color: #2A1B00; background: var(--warn);   border-color: var(--warn); }
+.ev-preclinical{ color: var(--muted); background: rgba(148,174,204,.12); border-color: rgba(148,174,204,.35); }
+.ev-halted     { color: #fff;    background: var(--danger); border-color: var(--danger); }
+
+/* ---------- preset buttons ---------- */
+.presets {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.preset {
+  min-height: 54px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 8px 4px;
+  border-radius: 10px;
+  cursor: pointer;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--txt);
+  font: inherit;
+  -webkit-tap-highlight-color: transparent;
+  transition: background .15s ease, border-color .15s ease, transform .1s ease;
+}
+
+.preset:active { transform: scale(.97); }
+
+.preset em {
+  font-style: normal;
+  font-size: 10px;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.preset b {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.15;
+  text-align: center;
+}
+
+.preset.on {
+  background: rgba(46, 155, 255, .18);
+  border-color: var(--blue);
+}
+.preset.on em { color: var(--cyan); }
+
+/* ---------- meter ---------- */
+.meter {
+  position: relative;
+  margin-top: 18px;
+}
+
+.meter-track {
+  display: flex;
+  height: 10px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--navy-2);
+}
+
+.zone { height: 100%; }
+.zone-under { flex: 0 0 22%; background: linear-gradient(90deg, rgba(255,181,71,.22), rgba(255,181,71,.55)); }
+.zone-in    { flex: 0 0 56%; background: linear-gradient(90deg, var(--ok), #2FB575); }
+.zone-over  { flex: 0 0 22%; background: linear-gradient(90deg, rgba(255,107,107,.55), rgba(255,107,107,.95)); }
+
+.meter-needle {
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  width: 0;
+  transition: left .3s cubic-bezier(.22, .9, .3, 1);
+}
+
+.needle-dot {
+  display: block;
+  width: 4px;
+  height: 20px;
+  margin-left: -2px;
+  border-radius: 3px;
+  background: #fff;
+  box-shadow: 0 0 0 2px var(--navy), 0 0 10px rgba(255, 255, 255, .55);
+}
+
+.meter-scale {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 9px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.meter-status {
+  margin: 10px 0 0;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.s-in    { color: var(--ok); }
+.s-under { color: var(--warn); }
+.s-over  { color: var(--danger); }
+.s-na    { color: var(--muted); font-weight: 500; }
+
+.ev-note {
+  margin: 8px 0 0;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+/* ---------- narrow phones ---------- */
+@media (max-width: 359px) {
+  .presets { grid-template-columns: 1fr; gap: 6px; }
+  .preset { flex-direction: row; gap: 8px; min-height: 44px; justify-content: space-between; padding: 8px 12px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .meter-needle { transition: none; }
+  .preset { transition: none; }
+}

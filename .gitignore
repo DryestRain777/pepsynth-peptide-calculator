@@ -1,0 +1,15 @@
+# OS cruft
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Build artifacts / local only
+*.zip
+assets/_make_icons.py
