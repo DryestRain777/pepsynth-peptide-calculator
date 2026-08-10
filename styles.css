@@ -137,12 +137,127 @@ input,select,button,textarea{font:inherit;color:inherit}
   background:linear-gradient(180deg,var(--navy-2),rgba(15,31,56,.6));
   border:1px solid var(--line);border-radius:var(--r);
   padding:20px 16px;margin:0 0 16px;
+  position:relative;
 }
 .card-title{
   font-size:17px;margin:0 0 14px;font-weight:700;letter-spacing:-.01em;
   display:flex;align-items:center;gap:9px;
 }
 .card-title::before{content:"";width:3px;height:17px;border-radius:2px;background:var(--blue);flex:none}
+
+/* ============================================
+   SECTION COLOR PALETTE
+   Each major section carries its own accent hue
+   so the eye can locate sections at a glance.
+   Hues are muted / cool to preserve the lab
+   aesthetic — never candy-colored.
+     calc      → electric blue    (primary)
+     ref       → cyan / teal      (spec sheet)
+     shop      → gold             (commerce)
+     howto     → mint green       (procedure)
+     storage   → cool violet      (reference table)
+     library   → magenta / pink   (catalog)
+     conv      → amber            (math)
+     faq      → sky blue          (help)
+     disclaimer→ red              (warning — unchanged)
+   Implementation: color-mix tints the panel gradient
+   + border + title bar, so contrast remains solid on
+   AA/AAA without touching typography. */
+
+.card.calc{
+  --accent:#2E9BFF; --accent-2:#5FD8FF;
+  background:linear-gradient(180deg,rgba(46,155,255,.10),rgba(15,31,56,.6));
+  border-color:rgba(46,155,255,.28);
+}
+.card.calc .card-title::before{background:linear-gradient(180deg,#5FD8FF,#2E9BFF)}
+
+.card.ref{
+  --accent:#5FD8FF; --accent-2:#7DEBFF;
+  background:linear-gradient(180deg,rgba(95,216,255,.09),rgba(15,31,56,.6));
+  border-color:rgba(95,216,255,.30);
+}
+.card.ref .card-title::before{background:linear-gradient(180deg,#7DEBFF,#5FD8FF)}
+
+.card.shop-banner{
+  --accent:#FFC85A; --accent-2:#FFE3A0;
+  background:linear-gradient(140deg,rgba(255,200,90,.14),rgba(15,31,56,.6));
+  border-color:rgba(255,200,90,.36);
+}
+.card.shop-banner .card-title::before,
+.card.shop-banner h2::before{background:linear-gradient(180deg,#FFE3A0,#FFC85A)}
+.card.shop-banner h2{color:#FFEFC6}
+
+.card.sec-howto{
+  --accent:#3AD9A5; --accent-2:#8CFFD4;
+  background:linear-gradient(180deg,rgba(58,217,165,.09),rgba(15,31,56,.6));
+  border-color:rgba(58,217,165,.30);
+}
+.card.sec-howto .card-title::before{background:linear-gradient(180deg,#8CFFD4,#3AD9A5)}
+.card.sec-howto .steps li::before{
+  background:rgba(58,217,165,.16);border-color:rgba(58,217,165,.35);color:#8CFFD4;
+}
+
+.card.sec-storage{
+  --accent:#A48CFF; --accent-2:#C7B7FF;
+  background:linear-gradient(180deg,rgba(164,140,255,.09),rgba(15,31,56,.6));
+  border-color:rgba(164,140,255,.30);
+}
+.card.sec-storage .card-title::before{background:linear-gradient(180deg,#C7B7FF,#A48CFF)}
+.card.sec-storage th{color:#C7B7FF}
+.card.sec-storage .callout{border-left-color:#A48CFF;background:rgba(164,140,255,.08)}
+
+.card.lib{
+  --accent:#FF7BC5; --accent-2:#FFA9DA;
+  background:linear-gradient(180deg,rgba(255,123,197,.08),rgba(15,31,56,.6));
+  border-color:rgba(255,123,197,.30);
+}
+.card.lib .card-title::before{background:linear-gradient(180deg,#FFA9DA,#FF7BC5)}
+.card.lib .chip.on{background:#FF7BC5;border-color:#FF7BC5;color:#2A0A1D}
+.card.lib .lib-list summary::after{color:#FF7BC5}
+.card.lib .lib-body h4{color:#FFA9DA}
+.card.lib .use-btn{background:rgba(255,123,197,.14);color:#FFA9DA}
+
+.card.sec-conv{
+  --accent:#FFB547; --accent-2:#FFD190;
+  background:linear-gradient(180deg,rgba(255,181,71,.10),rgba(15,31,56,.6));
+  border-color:rgba(255,181,71,.32);
+}
+.card.sec-conv .card-title::before{background:linear-gradient(180deg,#FFD190,#FFB547)}
+.card.sec-conv .conv b{color:#FFD190}
+.card.sec-conv .callout{border-left-color:#FFB547;background:rgba(255,181,71,.08)}
+
+.card.sec-faq{
+  --accent:#6EC6FF; --accent-2:#A6DEFF;
+  background:linear-gradient(180deg,rgba(110,198,255,.09),rgba(15,31,56,.6));
+  border-color:rgba(110,198,255,.30);
+}
+.card.sec-faq .card-title::before{background:linear-gradient(180deg,#A6DEFF,#6EC6FF)}
+.card.sec-faq>details summary::after{color:#6EC6FF}
+
+/* Disclaimer already has its own red palette; reinforce it */
+.card.disclaimer{
+  --accent:#FF6B6B; --accent-2:#FFA0A0;
+  background:linear-gradient(180deg,rgba(255,107,107,.07),rgba(15,31,56,.6));
+  border-color:rgba(255,107,107,.28);
+}
+.card.disclaimer .card-title::before{background:linear-gradient(180deg,#FFA0A0,#FF6B6B)}
+
+/* Thin colored top-rail on every accented card — reinforces the section
+   change without adding visual noise inside the card body. */
+.card.calc,.card.ref,.card.shop-banner,.card.sec-howto,.card.sec-storage,
+.card.lib,.card.sec-conv,.card.sec-faq,.card.disclaimer{
+  border-top-width:3px;border-top-style:solid;
+}
+.card.calc{border-top-color:#2E9BFF}
+.card.ref{border-top-color:#5FD8FF}
+.card.shop-banner{border-top-color:#FFC85A}
+.card.sec-howto{border-top-color:#3AD9A5}
+.card.sec-storage{border-top-color:#A48CFF}
+.card.lib{border-top-color:#FF7BC5}
+.card.sec-conv{border-top-color:#FFB547}
+.card.sec-faq{border-top-color:#6EC6FF}
+.card.disclaimer{border-top-color:#FF6B6B}
+
 
 /* ---------- FORM ---------- */
 .field{display:block;margin-bottom:14px}
