@@ -179,6 +179,16 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
 }
 .custom-vial{margin-top:8px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}
+.blend-note{
+  margin:2px 0 4px;padding:10px 12px;border-radius:10px;
+  background:rgba(46,155,255,.08);border:1px solid rgba(46,155,255,.28);
+  color:var(--txt);font-size:13px;line-height:1.5;
+}
+.blend-note b{color:var(--cyan)}
+.dose-conv{
+  margin:6px 2px 0;font-size:12px;color:var(--muted);line-height:1.4;
+}
+.dose-conv b{color:var(--txt);font-weight:600}
 
 .btn{
   border:0;border-radius:11px;padding:14px 18px;font-weight:700;font-size:15px;

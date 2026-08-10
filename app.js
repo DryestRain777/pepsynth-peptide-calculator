@@ -13,81 +13,43 @@
 
   /* ---------- ELEMENTS ---------- */
   const el = {
-    pep: $('pep'), vial: $('vial'), vialSel: $('vialSel'),
-    vialCustomWrap: $('vialCustomWrap'), bac: $('bac'), dose: $('dose'),
+    pep: $('pep'), vial: $('vial'), vialOptions: $('vialOptions'),
+    vialLabel: $('vialLabel'), vialUnit: $('vialUnit'),
+    bacRow: $('bacRow'), syrRow: $('syrRow'), freqRow: $('freqRow'),
+    bac: $('bac'), dose: $('dose'),
     doseUnit: $('doseUnit'), syr: $('syr'), freq: $('freq'),
+    doseConv: $('doseConv'), blendNote: $('blendNote'),
+    resInj: $('resInj'), resCap: $('resCap'),
     rUnits: $('rUnits'), rMl: $('rMl'), rConc: $('rConc'),
     rPer: $('rPer'), rDoses: $('rDoses'), rLast: $('rLast'),
+    cCount: $('cCount'), cCountLbl: $('cCountLbl'), cDoseEq: $('cDoseEq'),
+    cStr: $('cStr'), cDose: $('cDose'), cPerBottle: $('cPerBottle'), cLast: $('cLast'),
     warn: $('warn'), sFill: $('sFill'), sTicks: $('sTicks')
   };
 
   /* ---------- VIAL SIZES ----------
      Every strength offered across the Pepsynth Labs catalog, plus common
-     research sizes. When a compound is selected, its own sizes are listed
-     first under a "Available for <compound>" group. */
+     research sizes. Rendered into a <datalist> so users can either pick
+     from the dropdown OR type a custom value into the same field. */
   const ALL_VIAL_SIZES = [0.25, 0.5, 1, 2, 2.5, 3, 5, 7.5, 10, 12, 15, 20, 25, 30,
     40, 50, 60, 70, 75, 80, 100, 150, 200, 250, 500, 600, 750, 1000, 1500];
 
   function buildVialOptions(p) {
-    const current = num(el.vial.value) || 10;
-    el.vialSel.innerHTML = '';
-
+    el.vialOptions.innerHTML = '';
+    const seen = {};
+    const push = (v, label) => {
+      if (seen[v]) return;
+      seen[v] = 1;
+      const o = document.createElement('option');
+      o.value = String(v);
+      o.label = label || (v < 1 ? v * 1000 + ' mcg' : v + ' mg');
+      el.vialOptions.appendChild(o);
+    };
     if (p && p.vials && p.vials.length) {
-      const g = document.createElement('optgroup');
-      g.label = 'Available for ' + p.n;
-      p.vials.forEach((v) => g.appendChild(vialOpt(v)));
-      el.vialSel.appendChild(g);
+      p.vials.forEach((v) => push(v, (v < 1 ? v * 1000 + ' mcg' : v + ' mg') + ' — available for ' + p.n));
     }
-
-    const g2 = document.createElement('optgroup');
-    g2.label = p ? 'Other sizes' : 'Common vial sizes';
-    ALL_VIAL_SIZES.forEach((v) => {
-      if (p && p.vials && p.vials.indexOf(v) > -1) return;
-      g2.appendChild(vialOpt(v));
-    });
-    el.vialSel.appendChild(g2);
-
-    const custom = document.createElement('option');
-    custom.value = 'custom';
-    custom.textContent = 'Custom amount…';
-    el.vialSel.appendChild(custom);
-
-    setVial(current);
+    ALL_VIAL_SIZES.forEach((v) => push(v));
   }
-
-  function vialOpt(v) {
-    const o = document.createElement('option');
-    o.value = String(v);
-    o.textContent = (v < 1 ? v * 1000 + ' mcg' : v + ' mg');
-    return o;
-  }
-
-  /* Select a value in the dropdown, falling back to custom entry if the
-     value isn't one of the listed sizes. */
-  function setVial(v) {
-    el.vial.value = v;
-    const match = Array.prototype.find.call(
-      el.vialSel.options, (o) => o.value !== 'custom' && parseFloat(o.value) === v);
-    if (match) {
-      el.vialSel.value = match.value;
-      el.vialCustomWrap.hidden = true;
-    } else {
-      el.vialSel.value = 'custom';
-      el.vialCustomWrap.hidden = false;
-    }
-  }
-
-  el.vialSel.addEventListener('change', () => {
-    if (el.vialSel.value === 'custom') {
-      el.vialCustomWrap.hidden = false;
-      el.vial.focus();
-      el.vial.select();
-    } else {
-      el.vialCustomWrap.hidden = true;
-      el.vial.value = el.vialSel.value;
-    }
-    calc();
-  });
 
   /* ---------- POPULATE SELECT ---------- */
   PEPTIDES.slice().sort((a, b) => a.n.localeCompare(b.n)).forEach((p) => {
@@ -171,7 +133,6 @@
     'Tesamorelin/Ipamorelin Blend': 'limited',
     'Tesamorelin/CJC/Ipamorelin Tri-Blend': 'limited',
     'Tirzepatide/Retatrutide Blend': 'trial',
-    'Tesofensine/Semaglutide Blend': 'trial',
     // Halted for safety
     'ACE-031': 'halted', 'Adipotide (FTPP)': 'halted'
   };
@@ -192,8 +153,20 @@
 
   function doseInMg() {
     const v = num(el.dose.value);
-    return el.doseUnit.value === 'mcg' ? v / 1000 : v;
+    if (!v) return 0;
+    const u = el.doseUnit.value;
+    if (u === 'mcg') return v / 1000;
+    if (u === 'mg') return v;
+    if (u === 'IU') {
+      // IU only maps to mass when the active peptide provides iuPerMg
+      const p = activePeptide;
+      if (p && p.iuPerMg) return v / p.iuPerMg;
+      return 0;
+    }
+    return v;
   }
+
+  function setVial(v) { el.vial.value = v; }
 
   /* ---------- SYRINGE TICKS ---------- */
   let lastCap = null;
@@ -210,8 +183,58 @@
     }
   }
 
+  /* ---------- CAPSULE / INJECTION MODE TOGGLE ---------- */
+  function setMode(p) {
+    const capsule = !!(p && p.form === 'capsule');
+    el.resInj.hidden = capsule;
+    el.resCap.hidden = !capsule;
+    el.bacRow.style.display = capsule ? 'none' : '';
+    el.syrRow.style.display = capsule ? 'none' : '';
+    // vial-strength label + unit adapt for capsule mode
+    if (capsule) {
+      el.vialLabel.innerHTML = 'Capsule Strength <small>(per capsule)</small>';
+      el.vialUnit.textContent = p.capsuleUnit || 'mg';
+    } else {
+      el.vialLabel.innerHTML = 'Vial Strength <small>(type or choose)</small>';
+      el.vialUnit.textContent = 'mg';
+    }
+  }
+
+  /* ---------- DOSE CONVERSION HELPER ---------- */
+  function updateDoseConv() {
+    const v = num(el.dose.value);
+    const u = el.doseUnit.value;
+    const p = activePeptide;
+    const parts = [];
+    if (v) {
+      if (u === 'mcg') parts.push('<b>' + fmt(v, 3) + ' mcg</b> = ' + fmt(v / 1000, 4) + ' mg');
+      else if (u === 'mg') parts.push('<b>' + fmt(v, 4) + ' mg</b> = ' + fmt(v * 1000, 1) + ' mcg');
+      else if (u === 'IU') {
+        if (p && p.iuPerMg) {
+          const mg = v / p.iuPerMg;
+          parts.push('<b>' + fmt(v, 2) + ' IU</b> = ' + fmt(mg * 1000, 2) + ' mcg (' + fmt(mg, 5) + ' mg)');
+          parts.push('Conversion factor: 1 mg ' + p.n + ' = ' + p.iuPerMg + ' IU (so 1 IU ≈ ' + fmt(1000 / p.iuPerMg, 3) + ' mcg)');
+        } else {
+          parts.push('IU is only meaningful when the compound has a published IU/mg factor. Switch to mcg or mg.');
+        }
+      }
+    }
+    if (parts.length) {
+      el.doseConv.innerHTML = parts.join('<br>');
+      el.doseConv.hidden = false;
+    } else {
+      el.doseConv.hidden = true;
+    }
+  }
+
   /* ---------- CORE CALC ---------- */
   function calc() {
+    updateDoseConv();
+    const p = activePeptide;
+    const capsuleMode = !!(p && p.form === 'capsule');
+
+    if (capsuleMode) { calcCapsule(p); updateMeter(); return; }
+
     const vial = num(el.vial.value);
     const bac = num(el.bac.value);
     const dmg = doseInMg();
@@ -224,6 +247,7 @@
       ['rUnits', 'rMl', 'rConc', 'rPer', 'rDoses', 'rLast'].forEach((k) => { el[k].textContent = '—'; });
       el.sFill.style.width = '0%';
       el.warn.hidden = true;
+      updateMeter();
       return;
     }
 
@@ -269,6 +293,42 @@
     updateMeter();
   }
 
+  /* ---------- CAPSULE CALC ---------- */
+  function calcCapsule(p) {
+    // vial input reused as "capsule strength"; user can override
+    const capMg = (p.capsuleUnit === 'mcg' ? num(el.vial.value) / 1000 : num(el.vial.value));
+    const doseMg = doseInMg();
+    const perDay = parseFloat(el.freq.value) || 1;
+    const bottle = p.capsulesPerBottle || 30;
+
+    if (!capMg || !doseMg) {
+      ['cCount','cDoseEq','cStr','cDose','cPerBottle','cLast'].forEach(k => { el[k].textContent = '—'; });
+      el.warn.hidden = true;
+      return;
+    }
+    const nCaps = doseMg / capMg;
+    el.cCount.textContent = fmt(nCaps, nCaps < 10 ? 2 : 1);
+    el.cCountLbl.textContent = Math.abs(nCaps - 1) < 0.05 ? 'capsule' : 'capsules';
+    el.cStr.textContent = (p.capsuleUnit === 'mcg' ? fmt(capMg * 1000, 0) + ' mcg' : fmt(capMg, 3) + ' mg');
+    el.cDose.textContent = doseMg >= 1 ? fmt(doseMg, 3) + ' mg' : fmt(doseMg * 1000, 1) + ' mcg';
+    el.cDoseEq.textContent = '= ' + el.cDose.textContent + ' per dose';
+    el.cPerBottle.textContent = bottle;
+    // capsules used per day = nCaps * (1/perDay days-per-dose)
+    const capsPerDay = nCaps / perDay;
+    const daysBottle = bottle / capsPerDay;
+    el.cLast.textContent = daysBottle >= 60 ? plural(daysBottle / 7, 'week') : plural(daysBottle, 'day');
+
+    let msg = '';
+    let danger = false;
+    if (Math.abs(nCaps - Math.round(nCaps)) > 0.05 && Math.abs(nCaps - 0.5) > 0.05) {
+      msg = 'This dose requires ' + fmt(nCaps, 2) + ' capsules — not a clean whole or half count. Consider adjusting to ' +
+        Math.max(1, Math.round(nCaps)) + ' capsule(s) (' + fmt(Math.round(nCaps) * capMg, 3) + ' mg total).';
+    }
+    if (nCaps > 10) { msg = 'That dose requires ' + fmt(nCaps, 1) + ' capsules — check the capsule strength on your bottle.'; danger = true; }
+    if (msg) { el.warn.textContent = msg; el.warn.className = danger ? 'warn danger' : 'warn'; el.warn.hidden = false; }
+    else { el.warn.hidden = true; }
+  }
+
   /* ---------- DOSE RANGE METER ----------
      Maps the entered dose onto a three-zone bar:
        0–22%   below the cited starting dose
@@ -286,11 +346,18 @@
   function doseInPeptideUnit(p) {
     const v = num(el.dose.value);
     if (!v) return 0;
-    const entered = el.doseUnit.value;            // 'mcg' | 'mg'
+    const entered = el.doseUnit.value;            // 'mcg' | 'mg' | 'IU'
     if (entered === p.unit) return v;
     if (entered === 'mcg' && p.unit === 'mg') return v / 1000;
     if (entered === 'mg' && p.unit === 'mcg') return v * 1000;
-    return v;                                     // unit not comparable (mL, IU, %)
+    // IU ↔ mass conversions via peptide.iuPerMg (Oxytocin etc.)
+    if (p.iuPerMg) {
+      if (entered === 'IU' && p.unit === 'mg') return v / p.iuPerMg;
+      if (entered === 'IU' && p.unit === 'mcg') return (v / p.iuPerMg) * 1000;
+      if (entered === 'mg' && p.unit === 'IU') return v * p.iuPerMg;
+      if (entered === 'mcg' && p.unit === 'IU') return (v / 1000) * p.iuPerMg;
+    }
+    return v;                                     // unit not comparable
   }
 
   function meterPosition(v, low, high) {
@@ -308,7 +375,7 @@
     const p = activePeptide;
     if (!p) { rangeBox.hidden = true; return; }
 
-    const comparable = ['mcg', 'mg'].indexOf(p.unit) > -1;
+    const comparable = ['mcg', 'mg'].indexOf(p.unit) > -1 || (p.unit === 'IU' && p.iuPerMg);
     rangeBox.hidden = false;
 
     // Preset button labels
@@ -372,7 +439,7 @@
     const b = e.target.closest('.preset');
     if (!b || !activePeptide) return;
     const p = activePeptide;
-    el.doseUnit.value = ['mcg', 'mg'].indexOf(p.unit) > -1 ? p.unit : el.doseUnit.value;
+    if (['mcg', 'mg', 'IU'].indexOf(p.unit) > -1) el.doseUnit.value = p.unit;
     el.dose.value = p[b.dataset.k];
     calc();
   });
@@ -397,7 +464,7 @@
     ].map((r) => '<div><span>' + esc(r[0]) + '</span><b>' + esc(r[1]) + '</b></div>').join('');
     $('refTitr').textContent = p.titr;
     $('refStore').textContent = p.storage;
-    $('refNotes').textContent = p.notes;
+    $('refNotes').textContent = (p.blendNote ? p.blendNote + '\n\n' : '') + p.notes;
     $('refStack').textContent = p.stack;
   }
 
@@ -407,12 +474,32 @@
     activePeptide = p || null;
     showRef(p);
     buildVialOptions(p);
+    setMode(p);
+
+    // Blend note (only shown when the compound is a multi-peptide blend)
+    if (p && p.blendNote) {
+      el.blendNote.textContent = p.blendNote;
+      el.blendNote.hidden = false;
+    } else {
+      el.blendNote.hidden = true;
+    }
+
     if (!p) { rangeBox.hidden = true; calc(); return; }
 
-    setVial(p.vials[Math.min(1, p.vials.length - 1)]);
-    if (p.bac) el.bac.value = p.bac;
+    if (p.form === 'capsule') {
+      // vial input = per-capsule strength
+      setVial(p.capsuleStrength);
+    } else {
+      setVial(p.vials[Math.min(1, p.vials.length - 1)]);
+      if (p.bac) el.bac.value = p.bac;
+    }
+
+    // Dose unit: if the peptide has a native mcg/mg/IU unit we support, use it
     if (p.unit === 'mcg' || p.unit === 'mg') {
       el.doseUnit.value = p.unit;
+      el.dose.value = p.mid;
+    } else if (p.unit === 'IU' && p.iuPerMg) {
+      el.doseUnit.value = 'IU';
       el.dose.value = p.mid;
     }
 
@@ -500,19 +587,27 @@
 
   /* ---------- ACTIONS ---------- */
   $('copyBtn').addEventListener('click', async () => {
-    const txt = [
-      'PEPSYNTH LABS — Reconstitution Summary',
-      el.pep.value ? 'Compound: ' + el.pep.value : null,
-      'Vial: ' + el.vial.value + ' mg',
-      'BAC water: ' + el.bac.value + ' mL',
-      'Concentration: ' + el.rConc.textContent,
-      'Dose: ' + el.dose.value + ' ' + el.doseUnit.value,
-      'Draw: ' + el.rUnits.textContent + ' units (' + el.rMl.textContent + ')',
-      'Doses per vial: ' + el.rDoses.textContent,
-      'Vial lasts: ' + el.rLast.textContent,
-      '',
-      'For laboratory research use only. Not for human consumption.'
-    ].filter(Boolean).join('\n');
+    const p = activePeptide;
+    const capsule = !!(p && p.form === 'capsule');
+    const lines = ['PEPSYNTH LABS — ' + (capsule ? 'Dosing' : 'Reconstitution') + ' Summary'];
+    if (el.pep.value) lines.push('Compound: ' + el.pep.value);
+    if (capsule) {
+      lines.push('Capsule strength: ' + el.cStr.textContent);
+      lines.push('Dose per administration: ' + el.cDose.textContent);
+      lines.push('Take: ' + el.cCount.textContent + ' ' + el.cCountLbl.textContent);
+      lines.push('Capsules per bottle: ' + el.cPerBottle.textContent);
+      lines.push('Bottle lasts: ' + el.cLast.textContent);
+    } else {
+      lines.push('Vial: ' + el.vial.value + ' mg');
+      lines.push('BAC water: ' + el.bac.value + ' mL');
+      lines.push('Concentration: ' + el.rConc.textContent);
+      lines.push('Dose: ' + el.dose.value + ' ' + el.doseUnit.value);
+      lines.push('Draw: ' + el.rUnits.textContent + ' units (' + el.rMl.textContent + ')');
+      lines.push('Doses per vial: ' + el.rDoses.textContent);
+      lines.push('Vial lasts: ' + el.rLast.textContent);
+    }
+    lines.push('', 'For laboratory research use only. Not for human consumption.');
+    const txt = lines.join('\n');
     const btn = $('copyBtn');
     try {
       await navigator.clipboard.writeText(txt);
@@ -528,7 +623,9 @@
     el.pep.value = '';
     activePeptide = null;
     rangeBox.hidden = true;
+    el.blendNote.hidden = true;
     buildVialOptions(null);
+    setMode(null);
     setVial(10);
     el.bac.value = 2;
     el.dose.value = 250;
@@ -555,5 +652,6 @@
 
   renderLib();
   buildVialOptions(null);
+  setMode(null);
   calc();
 })();

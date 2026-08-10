@@ -90,14 +90,14 @@
 
   <div class="grid2">
     <label class="field">
-      <span>Vial Strength</span>
-      <select id="vialSel"></select>
-      <div class="input-suffix custom-vial" id="vialCustomWrap" hidden>
-        <input type="number" id="vial" inputmode="decimal" value="10" min="0.01" step="any" placeholder="Enter mg">
-        <b>mg</b>
+      <span id="vialLabel">Vial Strength <small>(type or choose)</small></span>
+      <div class="input-suffix">
+        <input type="number" id="vial" list="vialOptions" inputmode="decimal" value="10" min="0.001" step="any" placeholder="Type or choose">
+        <b id="vialUnit">mg</b>
       </div>
+      <datalist id="vialOptions"></datalist>
     </label>
-    <label class="field">
+    <label class="field" id="bacRow">
       <span>BAC Water Added</span>
       <div class="input-suffix">
         <input type="number" id="bac" inputmode="decimal" value="2" min="0.01" step="any">
@@ -106,6 +106,8 @@
     </label>
   </div>
 
+  <p class="blend-note" id="blendNote" hidden></p>
+
   <label class="field">
     <span>Desired Dose per Administration</span>
     <div class="input-suffix">
@@ -113,8 +115,10 @@
       <select id="doseUnit" class="unit-sel">
         <option value="mcg">mcg</option>
         <option value="mg">mg</option>
+        <option value="IU">IU</option>
       </select>
     </div>
+    <p class="dose-conv" id="doseConv" hidden></p>
   </label>
 
   <!-- COMMON RANGE PRESETS + METER -->
@@ -147,7 +151,7 @@
     <p class="ev-note" id="evNote"></p>
   </div>
 
-  <label class="field">
+  <label class="field" id="syrRow">
     <span>Syringe Type</span>
     <select id="syr">
       <option value="100">U-100 insulin · 1 mL (100 units)</option>
@@ -156,7 +160,7 @@
     </select>
   </label>
 
-  <label class="field">
+  <label class="field" id="freqRow">
     <span>Administration Frequency <small>(for vial longevity)</small></span>
     <select id="freq">
       <option value="7">Once weekly</option>
@@ -172,6 +176,9 @@
   <!-- RESULTS -->
   <div class="results" id="results">
     <img class="atom-deco results-atom" src="assets/logo-atom.png" alt="" aria-hidden="true">
+
+    <!-- INJECTION MODE -->
+    <div id="resInj">
     <div class="res-hero">
       <span class="res-label">Draw to this mark</span>
       <div class="res-units"><b id="rUnits">5</b><span>units</span></div>
@@ -192,6 +199,22 @@
       <div><span>Per unit (U-100)</span><b id="rPer">50 mcg</b></div>
       <div><span>Doses per vial</span><b id="rDoses">40</b></div>
       <div><span>Vial lasts</span><b id="rLast">40 days</b></div>
+    </div>
+    </div>
+
+    <!-- CAPSULE MODE -->
+    <div id="resCap" hidden>
+      <div class="res-hero">
+        <span class="res-label">Take this many capsules</span>
+        <div class="res-units"><b id="cCount">1</b><span id="cCountLbl">capsule</span></div>
+        <div class="res-ml" id="cDoseEq">= 50 mg</div>
+      </div>
+      <div class="res-grid">
+        <div><span>Capsule strength</span><b id="cStr">50 mg</b></div>
+        <div><span>Dose per administration</span><b id="cDose">50 mg</b></div>
+        <div><span>Capsules per bottle</span><b id="cPerBottle">30</b></div>
+        <div><span>Bottle lasts</span><b id="cLast">30 days</b></div>
+      </div>
     </div>
 
     <p class="warn" id="warn" hidden></p>

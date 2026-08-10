@@ -106,7 +106,7 @@ const PEPTIDES = [
   {
     n: "BAM15", cat: "Metabolic", vials: [25, 50, 100],
     mw: "302.2 Da", half: "~1.5–2 hours", route: "Oral (capsule)",
-    freq: "Once daily", unit: "mg",
+    freq: "Once daily", unit: "mg", form: "capsule", capsuleStrength: 50, capsuleUnit: "mg", capsulesPerBottle: 30,
     low: 25, mid: 50, high: 100,
     titr: "50 mg daily is the standard capsule strength. Short 4–8 week research blocks.",
     solvent: "N/A — oral capsule", bac: 0,
@@ -117,7 +117,7 @@ const PEPTIDES = [
   {
     n: "SLUPP-332", cat: "Metabolic", vials: [10, 25],
     mw: "~450 Da", half: "~4–6 hours", route: "Oral (capsule)",
-    freq: "Once daily", unit: "mcg",
+    freq: "Once daily", unit: "mcg", form: "capsule", capsuleStrength: 250, capsuleUnit: "mcg", capsulesPerBottle: 30,
     low: 250, mid: 250, high: 500,
     titr: "250 mcg daily is the standard capsule strength.",
     solvent: "N/A — oral capsule", bac: 0,
@@ -202,6 +202,7 @@ const PEPTIDES = [
     solvent: "Bacteriostatic water", bac: 3,
     storage: "Lyophilized: 2–8 °C. Reconstituted: 2–8 °C, 30 days.",
     notes: "GHRH analog paired with a selective GHRP in a single vial — the most common secretagogue combination. Calculate against the vial's total mg, not per component.",
+    blendNote: "TOTAL vial strength is the combined mg of both peptides. A 10 mg vial contains 5 mg CJC-1295 (no-DAC) + 5 mg Ipamorelin (a 20 mg vial contains 10 mg + 10 mg). Every dose you draw delivers HALF of that amount of each component — e.g. a 300 mcg total dose = ~150 mcg CJC-1295 + ~150 mcg Ipamorelin.",
     stack: "Standalone blend"
   },
   {
@@ -213,6 +214,7 @@ const PEPTIDES = [
     solvent: "Bacteriostatic water", bac: 3,
     storage: "2–8 °C; reconstituted 30 days.",
     notes: "GHRH + GHRP pairing in one vial. Calculate against the total labeled mg on the vial, not per component.",
+    blendNote: "TOTAL vial strength is the combined mg of both peptides. A 10 mg vial contains 5 mg Tesamorelin + 5 mg Ipamorelin (12 mg vial: 6 mg + 6 mg). Each dose delivers HALF of that amount of each component. Always verify the exact ratio on your Certificate of Analysis.",
     stack: "Standalone blend"
   },
   {
@@ -250,8 +252,8 @@ const PEPTIDES = [
   },
   {
     n: "MK-677 (Ibutamoren)", cat: "Growth Hormone", vials: [25, 50],
-    mw: "528.7 Da", half: "~24 hours", route: "Oral",
-    freq: "Once daily, pre-sleep", unit: "mg",
+    mw: "528.7 Da", half: "~24 hours", route: "Oral (capsule)",
+    freq: "Once daily, pre-sleep", unit: "mg", form: "capsule", capsuleStrength: 10, capsuleUnit: "mg", capsulesPerBottle: 30,
     low: 10, mid: 15, high: 25,
     titr: "10 mg nightly × 2 wks → 20–25 mg. Cycle 8–12 weeks.",
     solvent: "N/A — oral", bac: 0,
@@ -314,6 +316,7 @@ const PEPTIDES = [
     solvent: "Bacteriostatic water", bac: 3,
     storage: "Lyophilized: 2–8 °C. Reconstituted: 2–8 °C, 30–60 days.",
     notes: "The canonical tissue-repair pairing in one vial. BPC-157 drives angiogenesis and local healing while TB-500 acts systemically on cell migration — complementary rather than overlapping mechanisms.",
+    blendNote: "TOTAL vial strength is the combined mg of both peptides. A 20 mg vial contains 10 mg BPC-157 + 10 mg TB-500. Each dose delivers HALF of that amount of each — e.g. a 1 mg total dose = ~500 mcg BPC-157 + ~500 mcg TB-500.",
     stack: "Standalone blend"
   },
   {
@@ -509,7 +512,7 @@ const PEPTIDES = [
   // ——— PERFORMANCE / MUSCLE ———
   {
     n: "IGF-1 LR3", cat: "Performance", vials: [1],
-    mw: "9200 Da", half: "~20–30 hours", route: "SubQ",
+    mw: "9111 Da", half: "~20–30 hours", route: "SubQ",
     freq: "Once daily", unit: "mcg",
     low: 20, mid: 40, high: 80,
     titr: "20 mcg daily × 1 wk → 40–50 mcg. Cycles of 4 weeks max.",
@@ -560,6 +563,7 @@ const PEPTIDES = [
     solvent: "Bacteriostatic water", bac: 3,
     storage: "2–8 °C; reconstituted 30 days.",
     notes: "Combines two GHRH analogs with a selective GHRP. Always calculate from the vial's total mg.",
+    blendNote: "TOTAL vial strength = combined mg of all three peptides. Typical composition — 15 mg vial: 5 mg Tesamorelin + 5 mg CJC-1295 + 5 mg Ipamorelin. 20 mg vial: 10 mg Tesamorelin + 5 mg CJC-1295 + 5 mg Ipamorelin. Ratios vary by supplier — verify on your Certificate of Analysis.",
     stack: "Standalone blend"
   },
 
@@ -600,9 +604,9 @@ const PEPTIDES = [
   {
     n: "Oxytocin", cat: "Sexual Health", vials: [2, 5, 10],
     mw: "1007.2 Da", half: "~3–5 minutes", route: "Intranasal / SubQ",
-    freq: "As needed", unit: "IU",
+    freq: "As needed", unit: "IU", iuPerMg: 600,
     low: 10, mid: 20, high: 40,
-    titr: "10–40 IU intranasally. Effects observed 30–45 min post-administration.",
+    titr: "10–40 IU intranasally. Effects observed 30–45 min post-administration. Conversion: 1 mg synthetic oxytocin = 600 IU (USP standard), so 1 IU ≈ 1.667 mcg. A typical 20 IU dose = ~33.3 mcg (0.0333 mg).",
     solvent: "Sterile saline (nasal) or bacteriostatic water", bac: 2,
     storage: "2–8 °C strictly. Reconstituted: 14–30 days. Degrades quickly at room temp.",
     notes: "Nonapeptide with prosocial and anxiolytic signaling. Extremely short plasma half-life; intranasal route used for CNS access.",
@@ -617,6 +621,7 @@ const PEPTIDES = [
     solvent: "Bacteriostatic water", bac: 2,
     storage: "−20 °C lyophilized; 2–8 °C reconstituted, 28 days.",
     notes: "Multi-agonist blend. Overlapping receptor coverage means GI signal accumulates faster than either compound alone — extra-conservative titration is standard.",
+    blendNote: "TOTAL vial strength is the combined mg of both peptides. Common 1:1 formulation — a 20 mg vial contains 10 mg Tirzepatide + 10 mg Retatrutide (30 mg vial: 15 mg + 15 mg). Always verify the exact ratio on your Certificate of Analysis before dosing.",
     stack: "Standalone blend"
   },
   {
@@ -628,6 +633,7 @@ const PEPTIDES = [
     solvent: "Bacteriostatic water", bac: 5,
     storage: "2–8 °C; reconstituted 30 days, protect from light (copper content).",
     notes: "High-mg multi-component repair blend. Because total vial mass is large, reconstitution volume should be scaled up (4–6 mL) to keep injection volumes practical.",
+    blendNote: "TOTAL vial strength = combined mg of all four peptides. Typical composition — 60 mg vial: 30 mg GHK-Cu + 10 mg KPV + 10 mg BPC-157 + 10 mg TB-500. 80 mg vial: 50 mg GHK-Cu + 10 mg KPV + 10 mg BPC-157 + 10 mg TB-500. Ratios vary by supplier — always confirm the exact composition on your Certificate of Analysis.",
     stack: "Standalone blend"
   },
   {
@@ -639,11 +645,12 @@ const PEPTIDES = [
     solvent: "Bacteriostatic water", bac: 5,
     storage: "2–8 °C; reconstituted 30 days. Protect from light — solution will be blue from the copper peptide.",
     notes: "Skin, connective tissue, and systemic repair blend. Use 4–6 mL diluent given the high total peptide mass.",
+    blendNote: "TOTAL vial strength = combined mg of all three peptides. Typical composition — 50 mg vial: 30 mg GHK-Cu + 10 mg BPC-157 + 10 mg TB-500. 70 mg vial: 50 mg GHK-Cu + 10 mg BPC-157 + 10 mg TB-500. Ratios vary by supplier — always confirm on your Certificate of Analysis.",
     stack: "Standalone blend"
   },
   {
     n: "Adipotide (FTPP)", cat: "Metabolic", vials: [2, 5, 10],
-    mw: "~2600 Da", half: "~30 minutes", route: "SubQ",
+    mw: "~2050 Da", half: "~30 minutes", route: "SubQ",
     freq: "Once daily", unit: "mg",
     low: 0.5, mid: 1, high: 2,
     titr: "0.5–1 mg daily for short courses of 7–28 days maximum.",
@@ -654,7 +661,7 @@ const PEPTIDES = [
   },
   {
     n: "Snap-8 (Acetyl Octapeptide-3)", cat: "Cosmetic", vials: [10, 50],
-    mw: "1075 Da", half: "N/A (topical)", route: "Topical",
+    mw: "894 Da", half: "N/A (topical)", route: "Topical",
     freq: "1–2× daily", unit: "mg",
     low: 5, mid: 10, high: 10,
     titr: "Formulated at 5–10% in a topical base. Not for injection.",
@@ -687,8 +694,8 @@ const PEPTIDES = [
   },
   {
     n: "Larazotide", cat: "Other", vials: [10],
-    mw: "723.9 Da", half: "~30 minutes", route: "Oral only",
-    freq: "3× daily before meals", unit: "mg",
+    mw: "723.9 Da", half: "~30 minutes", route: "Oral (capsule)",
+    freq: "3× daily before meals", unit: "mg", form: "capsule", capsuleStrength: 0.5, capsuleUnit: "mg", capsulesPerBottle: 90,
     low: 0.5, mid: 0.5, high: 1,
     titr: "0.5 mg three times daily, 15 minutes before meals.",
     solvent: "N/A — acts locally in gut lumen", bac: 0,
