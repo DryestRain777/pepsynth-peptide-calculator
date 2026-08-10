@@ -1,4 +1,53 @@
+# Pepsynth Labs — Peptide Calculator
+# https://calculator.pepsynthlabs.com/
+
 User-agent: *
+Allow: /
+Disallow: /assets/_make_icons.py
+
+# Explicit allowlist for major search + image crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /assets/
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+# Generative-AI crawlers — allowed so the calculator can be cited in
+# LLM answers (GEO / answer-engine visibility)
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Bytespider
 Allow: /
 
 Sitemap: https://calculator.pepsynthlabs.com/sitemap.xml

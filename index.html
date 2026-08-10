@@ -6,39 +6,69 @@
 
 <!-- ── SECURITY ──
      Enforced in-document because GitHub Pages cannot send custom HTTP
-     headers. Site is fully self-contained: no CDN, fonts, analytics or
-     outbound requests, so the policy can stay maximally strict.
-     Note: frame-ancestors and HSTS are header-only and are NOT active
-     here — see _headers / .htaccess if this ever moves to a host that
-     supports response headers. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; object-src 'none'; media-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'self'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+     headers. Site is fully self-contained: no CDN, fonts, or analytics.
+     connect-src permits pepsynthlabs.com so the Shop CTAs and structured
+     data references resolve cleanly. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data: https://pepsynthlabs.com; font-src 'self'; connect-src 'self'; object-src 'none'; media-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'self'; base-uri 'none'; form-action 'https://pepsynthlabs.com'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 
+<!-- ── PRIMARY SEO ── -->
+<title>Peptide Reconstitution Calculator — BAC Water, mg/mL & Insulin Units | Pepsynth Labs</title>
+<meta name="description" content="Free peptide reconstitution calculator from Pepsynth Labs. Instantly compute bacteriostatic water volumes, mg/mL concentration and insulin-syringe unit marks for Semaglutide, Tirzepatide, Retatrutide, BPC-157, TB-500, GHK-Cu, Ipamorelin, CJC-1295, Tesamorelin and 50+ more research peptides. Mobile-friendly, no signup.">
+<meta name="keywords" content="peptide calculator, peptide reconstitution calculator, BAC water calculator, bacteriostatic water calculator, insulin syringe units calculator, semaglutide calculator, tirzepatide calculator, retatrutide dose calculator, BPC-157 calculator, TB-500 calculator, GHK-Cu calculator, ipamorelin calculator, CJC-1295 calculator, tesamorelin calculator, oxytocin IU to mg, peptide dosage calculator, mcg to mg peptide, research peptides, Pepsynth Labs">
+<meta name="author" content="Pepsynth Labs">
+<meta name="publisher" content="Pepsynth Labs">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="googlebot" content="index, follow, max-image-preview:large">
 <meta name="theme-color" content="#0A1628">
-<meta name="description" content="Pepsynth Labs Peptide Reconstitution Calculator — instant BAC water, concentration and insulin-syringe unit calculations plus a full reference library for 50+ research peptides.">
-<title>Peptide Reconstitution Calculator | Pepsynth Labs</title>
+<meta name="color-scheme" content="dark">
+<meta name="format-detection" content="telephone=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Peptide Calc">
+<meta name="application-name" content="Pepsynth Peptide Calculator">
+<meta name="geo.region" content="US">
+<meta name="geo.placename" content="United States">
+<meta name="rating" content="general">
+
 <link rel="canonical" href="https://calculator.pepsynthlabs.com/">
-<meta name="robots" content="index, follow">
+<link rel="alternate" hreflang="en-us" href="https://calculator.pepsynthlabs.com/">
+<link rel="alternate" hreflang="x-default" href="https://calculator.pepsynthlabs.com/">
+
+<!-- Performance hints — parent site connection warms while page paints -->
+<link rel="preconnect" href="https://pepsynthlabs.com" crossorigin>
+<link rel="dns-prefetch" href="https://pepsynthlabs.com">
+<link rel="preload" href="styles.css" as="style">
+<link rel="preload" href="assets/logo-wordmark.png" as="image">
 
 <!-- Brand assets -->
 <link rel="icon" href="assets/favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<meta property="og:title" content="Peptide Reconstitution Calculator | Pepsynth Labs">
-<meta property="og:description" content="Instant BAC water, concentration and insulin-syringe unit calculations for 50+ research peptides.">
+<link rel="manifest" href="manifest.webmanifest">
+
+<!-- Open Graph / Twitter -->
+<meta property="og:title" content="Peptide Reconstitution Calculator — Instant BAC Water & Dose Math | Pepsynth Labs">
+<meta property="og:description" content="Free instant peptide reconstitution calculator. BAC water, mg/mL, insulin units and per-vial dose counts for 50+ research compounds. Mobile-friendly.">
 <meta property="og:image" content="https://calculator.pepsynthlabs.com/assets/og-card-2026a.png">
 <meta property="og:image:secure_url" content="https://calculator.pepsynthlabs.com/assets/og-card-2026a.png">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Pepsynth Labs">
-<meta name="twitter:image" content="https://calculator.pepsynthlabs.com/assets/og-card-2026a.png">
+<meta property="og:image:alt" content="Pepsynth Labs Peptide Reconstitution Calculator">
 <meta property="og:url" content="https://calculator.pepsynthlabs.com/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Pepsynth Labs">
+<meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Peptide Reconstitution Calculator | Pepsynth Labs">
+<meta name="twitter:description" content="Free instant peptide reconstitution calculator + reference library for 50+ research peptides.">
+<meta name="twitter:image" content="https://calculator.pepsynthlabs.com/assets/og-card-2026a.png">
+<meta name="twitter:image:alt" content="Pepsynth Labs Peptide Reconstitution Calculator">
 
-<link rel="stylesheet" href="styles.css">  <link rel="stylesheet" href="meter.css"></head>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="meter.css">
+</head>
 <body>
 
 <!-- ── AGE / RESEARCH GATE ── -->
@@ -68,12 +98,23 @@
 </header>
 
 <!-- ── HERO ── -->
-<section class="hero">
+<section class="hero" aria-labelledby="mainH1">
   <img class="atom-deco hero-atom" src="assets/logo-atom.png" alt="" aria-hidden="true">
   <div class="wrap">
-    <span class="eyebrow">Research Tools</span>
-    <h1>Peptide Reconstitution<br><b>Calculator</b></h1>
-    <p>Exact bacteriostatic water volumes, concentrations and insulin-syringe unit marks — plus a complete reconstitution &amp; handling reference for 50+ research compounds.</p>
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="https://pepsynthlabs.com/">Pepsynth Labs</a>
+      <span aria-hidden="true">›</span>
+      <a href="https://pepsynthlabs.com/shop/">Shop</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">Peptide Calculator</span>
+    </nav>
+    <span class="eyebrow">Research Tools · Free · No Signup</span>
+    <h1 id="mainH1">Peptide Reconstitution<br><b>Calculator</b></h1>
+    <p>Exact bacteriostatic water volumes, mg/mL concentrations, insulin-syringe unit marks and per-vial dose counts for <strong>50+ research peptides</strong> — including Semaglutide, Tirzepatide, Retatrutide, BPC-157, TB-500, GHK-Cu, Ipamorelin, CJC-1295 and Tesamorelin. Mobile-optimized, instantly updated, and paired with a full reconstitution &amp; handling reference library.</p>
+    <p class="hero-cta">
+      <a class="btn btn-primary hero-shop" href="https://pepsynthlabs.com/shop/" rel="noopener">Shop Research Peptides →</a>
+      <a class="hero-link" href="#calc">Jump to Calculator ↓</a>
+    </p>
   </div>
 </section>
 
@@ -218,6 +259,7 @@
     </div>
 
     <p class="warn" id="warn" hidden></p>
+    <a class="btn btn-shop" id="shopCta" href="https://pepsynthlabs.com/shop/" rel="noopener" target="_blank">Shop this compound at Pepsynthlabs.com →</a>
     <div class="res-actions">
       <button class="btn btn-ghost" id="copyBtn">Copy Summary</button>
       <button class="btn btn-ghost" id="resetBtn">Reset</button>
@@ -235,7 +277,20 @@
   <div class="ref-block"><h3>Reconstitution &amp; Storage</h3><p id="refStore"></p></div>
   <div class="ref-block"><h3>Research Notes</h3><p id="refNotes"></p></div>
   <div class="ref-block"><h3>Commonly Studied Alongside</h3><p id="refStack"></p></div>
+  <a class="btn btn-shop" id="refShopCta" href="https://pepsynthlabs.com/shop/" rel="noopener" target="_blank">Shop this peptide at Pepsynthlabs.com →</a>
 </section>
+
+<!-- ── SHOP BANNER ── -->
+<aside class="card shop-banner" aria-label="Pepsynth Labs Shop">
+  <div class="shop-banner-body">
+    <h2>Buy Research Peptides from Pepsynth Labs</h2>
+    <p><strong>99% purity · Third-party HPLC/MS tested · U.S. shipping · Free over $200</strong>. Semaglutide, Tirzepatide, Retatrutide, BPC-157, TB-500, GHK-Cu, Ipamorelin, CJC-1295, Tesamorelin, NAD+, Epitalon, PT-141 and 40+ other research compounds in stock.</p>
+    <div class="shop-banner-cta">
+      <a class="btn btn-primary" href="https://pepsynthlabs.com/shop/" rel="noopener">Shop All Peptides →</a>
+      <a class="btn btn-ghost" href="https://pepsynthlabs.com/shop/?category=blends" rel="noopener">Shop Peptide Blends</a>
+    </div>
+  </div>
+</aside>
 
 <!-- ── HOW TO RECONSTITUTE ── -->
 <section class="card">
@@ -346,7 +401,16 @@
 
 <a class="fab" href="#calc" id="fab">Calculator</a>
 
+<!-- ── STICKY MOBILE SHOP BAR ── -->
+<div class="shop-bar" id="shopBar" role="complementary" aria-label="Buy from Pepsynth Labs">
+  <div class="shop-bar-inner">
+    <span class="shop-bar-txt">Ready-to-ship research peptides · 99% purity</span>
+    <a class="shop-bar-cta" href="https://pepsynthlabs.com/shop/" rel="noopener">Shop →</a>
+  </div>
+</div>
+
 <script src="peptides.js"></script>
 <script src="app.js"></script>
+<script src="schema.js" defer></script>
 </body>
 </html>

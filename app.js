@@ -151,6 +151,29 @@
     ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;',
        "'": '&#39;', '`': '&#96;', '/': '&#47;' }[c]));
 
+  /* URL-safe slug used for deep-linkable per-peptide anchors */
+  const slug = (n) => String(n).toLowerCase()
+    .replace(/[()\/+.,]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+  /* Build a Pepsynth shop URL that pre-fills a search for the peptide */
+  const SHOP_BASE = 'https://pepsynthlabs.com/shop/';
+  function shopUrl(p) {
+    if (!p) return SHOP_BASE;
+    // strip trailing parenthetical (e.g. "MK-677 (Ibutamoren)" -> "MK-677")
+    const clean = p.n.replace(/\s*\(.*\)\s*/g, '').trim();
+    return SHOP_BASE + '?s=' + encodeURIComponent(clean);
+  }
+
+  function updateShopCtas(p) {
+    const url = shopUrl(p);
+    const label = p ? 'Shop ' + p.n.replace(/\s*\(.*\)\s*/g, '').trim() + ' at Pepsynthlabs.com →'
+                    : 'Shop research peptides at Pepsynthlabs.com →';
+    const btns = [document.getElementById('shopCta'), document.getElementById('refShopCta')];
+    btns.forEach((b) => { if (b) { b.href = url; b.textContent = label; } });
+  }
+
   function doseInMg() {
     const v = num(el.dose.value);
     if (!v) return 0;
@@ -473,6 +496,7 @@
     const p = byName(el.pep.value);
     activePeptide = p || null;
     showRef(p);
+    updateShopCtas(p);
     buildVialOptions(p);
     setMode(p);
 
@@ -552,7 +576,9 @@
 
     libList.innerHTML = list.map((p) => {
       const range = (p.low === p.high ? p.low : p.low + '–' + p.high) + ' ' + p.unit;
-      return '<details>' +
+      const buy = shopUrl(p);
+      const cleanName = p.n.replace(/\s*\(.*\)\s*/g, '').trim();
+      return '<article id="peptide-' + slug(p.n) + '"><details>' +
         '<summary><span>' + esc(p.n) + '</span><em>' + esc(p.cat) + '</em></summary>' +
         '<div class="lib-body"><div class="kv">' +
         kv('Reference Range', range) +
@@ -565,12 +591,16 @@
         kv('Diluent', p.solvent) +
         kv('Suggested BAC', p.bac ? p.bac + ' mL' : 'N/A') +
         '</div>' +
+        (p.blendNote ? '<h4>Blend Composition</h4><p>' + esc(p.blendNote) + '</p>' : '') +
         '<h4>Titration</h4><p>' + esc(p.titr) + '</p>' +
         '<h4>Storage</h4><p>' + esc(p.storage) + '</p>' +
         '<h4>Research Notes</h4><p>' + esc(p.notes) + '</p>' +
         '<h4>Commonly Studied Alongside</h4><p>' + esc(p.stack) + '</p>' +
-        '<button type="button" class="use-btn" data-pep="' + esc(p.n) + '">Load into calculator ↑</button>' +
-        '</div></details>';
+        '<div class="lib-actions">' +
+          '<button type="button" class="use-btn" data-pep="' + esc(p.n) + '">Load into calculator ↑</button>' +
+          '<a class="buy-btn" href="' + esc(buy) + '" rel="noopener" target="_blank">Buy ' + esc(cleanName) + ' →</a>' +
+        '</div>' +
+        '</div></details></article>';
     }).join('');
   }
   function kv(k, v) { return '<div><span>' + esc(k) + '</span><b>' + esc(v) + '</b></div>'; }
@@ -653,5 +683,42 @@
   renderLib();
   buildVialOptions(null);
   setMode(null);
+  updateShopCtas(null);
   calc();
+
+  /* ---------- DEEP LINKING ----------
+     Support two entry patterns for shareable, indexable URLs:
+       ?q=BPC-157          → pre-fill the library search
+       #peptide-bpc-157    → open that peptide's card + load into calculator
+     This lets Pepsynth blog posts, Google results and external links land
+     users directly on the compound they came for. */
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const q = params.get('q');
+    if (q) {
+      const s = document.getElementById('search');
+      if (s) { s.value = q; query = q; renderLib(); }
+    }
+    const applyHash = () => {
+      const h = window.location.hash.replace(/^#/, '');
+      if (!h) return;
+      const m = h.match(/^peptide-(.+)$/);
+      if (m) {
+        const target = PEPTIDES.find((p) => slug(p.n) === m[1]);
+        if (target) {
+          el.pep.value = target.n;
+          autofill();
+          // scroll to the library entry so users see the deep-linked article
+          const anchor = document.getElementById('peptide-' + m[1]);
+          if (anchor) {
+            const d = anchor.querySelector('details');
+            if (d) d.open = true;
+            setTimeout(() => anchor.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60);
+          }
+        }
+      }
+    };
+    applyHash();
+    window.addEventListener('hashchange', applyHash);
+  } catch (e) { /* no-op */ }
 })();

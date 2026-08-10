@@ -380,3 +380,119 @@ tbody tr:nth-child(odd){background:rgba(255,255,255,.025)}
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important;scroll-behavior:auto}
 }
+
+/* ============================================
+   SEO / CONVERSION ENHANCEMENTS
+   Breadcrumb, hero CTA, shop banner, sticky
+   shop bar, per-peptide buy button, deep-link
+   article wrappers. Mobile-first with generous
+   tap targets and a bottom-safe sticky bar.
+   ============================================ */
+
+/* Breadcrumb (also referenced by BreadcrumbList JSON-LD) */
+.breadcrumbs{
+  font-size:12px;color:var(--muted);margin-bottom:12px;
+  display:flex;flex-wrap:wrap;gap:6px;align-items:center;
+  letter-spacing:.03em;
+}
+.breadcrumbs a{color:var(--cyan);text-decoration:none}
+.breadcrumbs a:hover,.breadcrumbs a:focus{text-decoration:underline}
+.breadcrumbs span[aria-current]{color:var(--txt);font-weight:600}
+
+/* Hero CTA row */
+.hero-cta{
+  display:flex;flex-wrap:wrap;gap:12px;align-items:center;
+  margin-top:18px;
+}
+.hero-shop{
+  width:auto;padding:14px 22px;font-size:15px;
+  display:inline-flex;align-items:center;text-decoration:none;
+}
+.hero-link{
+  color:var(--cyan);font-weight:600;text-decoration:none;
+  padding:12px 4px;min-height:44px;display:inline-flex;align-items:center;
+}
+.hero-link:hover,.hero-link:focus{text-decoration:underline}
+
+/* Shop CTA button (results + reference card) */
+.btn-shop{
+  display:block;width:100%;margin-top:14px;text-align:center;text-decoration:none;
+  background:linear-gradient(100deg,var(--blue),var(--blue-dk));color:#fff;
+  padding:14px 18px;font-size:14.5px;font-weight:700;border-radius:11px;
+  box-shadow:0 6px 20px rgba(46,155,255,.35);
+  min-height:48px;line-height:1.2;
+}
+.btn-shop:hover,.btn-shop:focus{filter:brightness(1.08)}
+
+/* Full-width shop banner card */
+.shop-banner{
+  background:linear-gradient(140deg,rgba(46,155,255,.14),rgba(15,31,56,.6));
+  border-color:rgba(95,216,255,.35);
+}
+.shop-banner h2{
+  font-size:19px;margin:0 0 10px;line-height:1.25;letter-spacing:-.01em;
+}
+.shop-banner p{font-size:14px;color:#CFE0F5;margin:0 0 14px;line-height:1.55}
+.shop-banner p strong{color:var(--cyan)}
+.shop-banner-cta{display:grid;gap:9px;grid-template-columns:1fr}
+.shop-banner-cta .btn{width:100%;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+
+/* Per-peptide Buy button in the library */
+.lib-actions{display:grid;grid-template-columns:1fr;gap:9px;margin-top:14px}
+.lib-actions .use-btn{margin-top:0}
+.buy-btn{
+  display:block;text-align:center;text-decoration:none;font-weight:700;font-size:13.5px;
+  padding:11px;border-radius:10px;min-height:44px;line-height:1.3;
+  background:linear-gradient(100deg,var(--blue),var(--blue-dk));color:#fff;
+  box-shadow:0 4px 14px rgba(46,155,255,.28);
+}
+.buy-btn:hover,.buy-btn:focus{filter:brightness(1.08)}
+
+/* Sticky mobile shop bar
+   Sits above the FAB, respects iOS safe-area. Hidden on desktop where the
+   in-page CTAs are more visible. */
+.shop-bar{
+  position:fixed;left:0;right:0;bottom:0;z-index:95;
+  background:rgba(5,12,24,.94);backdrop-filter:blur(14px);
+  border-top:1px solid var(--line);
+  padding:10px 14px calc(10px + env(safe-area-inset-bottom));
+  transform:translateY(0);transition:transform .25s ease;
+}
+.shop-bar-inner{
+  max-width:760px;margin:0 auto;display:flex;align-items:center;
+  justify-content:space-between;gap:10px;
+}
+.shop-bar-txt{font-size:12.5px;color:var(--muted);line-height:1.3;flex:1;min-width:0}
+.shop-bar-cta{
+  flex:none;background:linear-gradient(100deg,var(--blue),var(--blue-dk));color:#fff;
+  padding:10px 20px;border-radius:99px;font-weight:800;font-size:13.5px;
+  text-decoration:none;box-shadow:0 6px 18px rgba(46,155,255,.4);
+  min-height:44px;display:inline-flex;align-items:center;
+}
+/* Push the FAB above the shop bar */
+.fab{bottom:calc(74px + env(safe-area-inset-bottom))}
+
+/* Deep-link scroll anchor offset (sticky header) */
+[id^="peptide-"]{scroll-margin-top:80px}
+
+/* Tap-target minimums for mobile a11y */
+@media (max-width:520px){
+  .btn,.use-btn,.buy-btn,.chip,.head-cta,.hero-shop,
+  .shop-bar-cta,.gate-card .btn{min-height:44px}
+  .chip{padding:9px 14px}
+  .site-foot nav a{padding:6px 0;display:inline-block}
+  .head-cta{padding:10px 18px;font-size:13px}
+  /* prevent the sticky shop bar overlapping the footer disclaimer */
+  .site-foot{padding-bottom:130px}
+}
+
+/* Desktop: promote shop banner to two-column CTA layout */
+@media (min-width:640px){
+  .shop-banner-cta{grid-template-columns:auto auto;justify-content:start}
+  .shop-banner-cta .btn{padding:13px 22px}
+  .lib-actions{grid-template-columns:1fr 1fr}
+  .hero-cta{margin-top:22px}
+  /* Sticky bar shown on desktop too but slimmer */
+  .shop-bar{padding-top:8px;padding-bottom:calc(8px + env(safe-area-inset-bottom))}
+  .fab{bottom:calc(66px + env(safe-area-inset-bottom))}
+}

@@ -1,0 +1,25 @@
+{
+  "name": "Pepsynth Peptide Reconstitution Calculator",
+  "short_name": "Peptide Calc",
+  "description": "Free peptide reconstitution calculator — BAC water volumes, mg/mL concentration and insulin-syringe unit marks for 50+ research peptides.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0A1628",
+  "theme_color": "#0A1628",
+  "lang": "en-US",
+  "dir": "ltr",
+  "categories": ["utilities", "science", "medical", "productivity"],
+  "icons": [
+    { "src": "assets/favicon.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/apple-touch-icon.png", "sizes": "180x180", "type": "image/png", "purpose": "any" },
+    { "src": "assets/logo-atom.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Semaglutide calculator", "url": "/#peptide-semaglutide" },
+    { "name": "Tirzepatide calculator", "url": "/#peptide-tirzepatide" },
+    { "name": "BPC-157 calculator", "url": "/#peptide-bpc-157" },
+    { "name": "Shop at Pepsynth Labs", "url": "https://pepsynthlabs.com/shop/" }
+  ]
+}
