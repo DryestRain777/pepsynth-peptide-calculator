@@ -630,9 +630,9 @@ const PEPTIDES = [
     freq: "Once daily", unit: "mg",
     low: 0.5, mid: 1, high: 2,
     titr: "Dose by total labeled mg of the blend.",
-    solvent: "Bacteriostatic water", bac: 5,
+    solvent: "Bacteriostatic water", bac: 2,
     storage: "2–8 °C; reconstituted 30 days, protect from light (copper content).",
-    notes: "High-mg multi-component repair blend. Because total vial mass is large, reconstitution volume should be scaled up (4–6 mL) to keep injection volumes practical.",
+    notes: "High-mg multi-component repair blend. Reconstitute with 2–3 mL of bacteriostatic water to keep injection volumes practical while maintaining a workable concentration.",
     blendNote: "TOTAL vial strength = combined mg of all four peptides. Typical composition — 60 mg vial: 30 mg GHK-Cu + 10 mg KPV + 10 mg BPC-157 + 10 mg TB-500. 80 mg vial: 50 mg GHK-Cu + 10 mg KPV + 10 mg BPC-157 + 10 mg TB-500. Ratios vary by supplier — always confirm the exact composition on your Certificate of Analysis.",
     stack: "Standalone blend"
   },
